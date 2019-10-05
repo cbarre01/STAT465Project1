@@ -116,9 +116,9 @@ summary(model4)
 
 # Concordance
 pred4 <- plogis(predict(model4, my_data))  # Predicted Scores
-cord4 <- Concordance(my_data$hate_speech_ind, pred)
+cord4 <- Concordance(my_data$hate_speech_ind, pred4)
 
-##### I AM HERE #####
+
 ## Model 5 - Random Intercepts For School
 model5 <- glmer(hate_speech_ind ~ gender_identity + sexual_orientation + year
               + greek_life_ind + athlete_ind + transfer_student_ind + (1 | school), data = my_data, family = "binomial")
@@ -130,9 +130,80 @@ wald.test(b = fixef(model5), Sigma = vcov(model5), Terms = 6:12) # Sexual Orient
 wald.test(b = fixef(model5), Sigma = vcov(model5), Terms = 13:17) # Year Identity p-value
 summary(model5)
 
+
+## Model 6 - Random Remove Athlete
+model6 <- glmer(hate_speech_ind ~ gender_identity + sexual_orientation + year
+                + greek_life_ind + transfer_student_ind + (1 | school), data = my_data, family = "binomial")
+# VIF check
+vif(model6)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model6), Sigma = vcov(model6), Terms = 2:5) # Gender Identity p-value
+wald.test(b = fixef(model6), Sigma = vcov(model6), Terms = 6:12) # Sexual Orientation p-value
+wald.test(b = fixef(model6), Sigma = vcov(model6), Terms = 13:17) # Year Identity p-value
+summary(model6)
+
+
+## Model 7 - Random Transfer Student
+model7 <- glmer(hate_speech_ind ~ gender_identity + sexual_orientation + year
+                + greek_life_ind + (1 | school), data = my_data, family = "binomial")
+# VIF check
+vif(model7)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model7), Sigma = vcov(model7), Terms = 2:5) # Gender Identity p-value
+wald.test(b = fixef(model7), Sigma = vcov(model7), Terms = 6:12) # Sexual Orientation p-value
+wald.test(b = fixef(model7), Sigma = vcov(model7), Terms = 13:17) # Year Identity p-value
+summary(model7)
+
+
+## Model 8 - Random Transfer Student
+model8 <- glmer(hate_speech_ind ~ gender_identity + sexual_orientation + year
+                + greek_life_ind + (1 | school), data = my_data, family = "binomial")
+# VIF check
+vif(model8)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model8), Sigma = vcov(model8), Terms = 2:5) # Gender Identity p-value
+wald.test(b = fixef(model8), Sigma = vcov(model8), Terms = 6:12) # Sexual Orientation p-value
+wald.test(b = fixef(model8), Sigma = vcov(model8), Terms = 13:17) # Year Identity p-value
+summary(model8)
+
+
+## Model 9 - Random Transfer Student
+model9 <- glmer(hate_speech_ind ~ gender_identity + sexual_orientation
+                + greek_life_ind + (1 | school), data = my_data, family = "binomial")
+# VIF check
+vif(model9)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model9), Sigma = vcov(model9), Terms = 2:5) # Gender Identity p-value
+wald.test(b = fixef(model9), Sigma = vcov(model9), Terms = 6:12) # Sexual Orientation p-value
+summary(model9)
+
+
+## Model 9 - Add First Year Indicator
+model9 <- glmer(hate_speech_ind ~ gender_identity + sexual_orientation + first_yr_ind
+                + greek_life_ind + (1 | school), data = my_data, family = "binomial")
+# VIF check
+vif(model9)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model9), Sigma = vcov(model9), Terms = 2:5) # Gender Identity p-value
+wald.test(b = fixef(model9), Sigma = vcov(model9), Terms = 6:12) # Sexual Orientation p-value
+summary(model9)
+
+
+####### FINAL MODEL #1R #######
+## Model 10 - Remove Sexual Orientation 
+model9 <- glmer(hate_speech_ind ~ gender_identity + first_yr_ind
+                + greek_life_ind + (1 | school), data = my_data, family = "binomial")
+# VIF check
+vif(model9)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model9), Sigma = vcov(model9), Terms = 2:5) # Gender Identity p-value
+summary(model9)
 # Concordance
-pred4 <- plogis(predict(model5, my_data))  # Predicted Scores
-cord4 <- Concordance(my_data$hate_speech_ind, pred)
+pred10 <- plogis(predict(model10, my_data))  # Predicted Scores
+cord10 <- Concordance(my_data$hate_speech_ind, pred10)
+
+
+
 
 ### Hazing
 # Modelling is done using backwards elimination at alpha .1 significance level
@@ -223,6 +294,7 @@ pred7b <- plogis(predict(model7b, my_data, type="response"))  # Predicted Scores
 cord7b <- Concordance(my_data$hate_speech_ind, pred)
 
 
+####### FINAL MODEL #2 #######
 ## Model 8b - Add Indicator For First Year
 model8b <- glm(hazing_ind ~ first_yr_ind + first_generation_college_student_ind
                + greek_life_ind + athlete_ind, data = my_data, family = binomial(link = "logit"))
@@ -234,3 +306,34 @@ summary(model8b)
 # Concordance
 pred8b <- plogis(predict(model8b, my_data, type="response"))  # Predicted Scores
 cord8b <- Concordance(my_data$hate_speech_ind, pred)
+
+
+## Model 9b - Add Random Intercepts For School
+model9b <- glmer(hazing_ind ~ first_yr_ind + first_generation_college_student_ind
+               + greek_life_ind + athlete_ind + (1 | school), data = my_data, family = binomial(link = "logit"))
+# VIF check
+vif(model9b)
+# Wald Tests For Fixed Effects
+summary(model9b)
+
+
+## Model 10b - Swap Indicator For First Year With Year
+model10b <- glmer(hazing_ind ~ year + first_generation_college_student_ind
+                 + greek_life_ind + athlete_ind + (1 | school), data = my_data, family = binomial(link = "logit"))
+# VIF check
+vif(model10b)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model10b), Sigma = vcov(model10b), Terms = 2:6) # Year p-value
+summary(model10b)
+
+
+####### FINAL MODEL #2B #######
+## Model11b - Back To First Year Indicator, Add Sexual Orientation
+model11b <- glmer(hazing_ind ~ first_yr_ind + sexual_orientation + first_generation_college_student_ind
+                 + greek_life_ind + athlete_ind + (1 | school), data = my_data, family = binomial(link = "logit"))
+# VIF check
+vif(model11b)
+# Wald Tests For Fixed Effects
+wald.test(b = fixef(model10b), Sigma = vcov(model10b), Terms = 3:9) # Year p-value
+summary(model11b)
+
