@@ -62,6 +62,8 @@ options(scipen=999)  # turn off scientific notation like 1e+06
 library(ggplot2)
 
 
+
+#Creating table with proportions for plotting
 intervention_means = aggregate(my_data[, 12:13], list(my_data$school), mean)
 
 colnames(intervention_means) = c("school", "hazing_prop", "hate_prop")
