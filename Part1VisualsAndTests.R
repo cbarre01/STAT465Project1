@@ -125,5 +125,13 @@ cHaze
 #chisq residuals
 round(cHaze$residuals, 3)
 
+#Regression models
+modelHate = glm(hate_speech_ind ~ school, data = my_data, family = binomial(link = "logit"))
+summary(modelHate)
+
+modelHaze = glm(hazing_ind ~ school, data = my_data, family = binomial(link = "logit"))
+summary(modelHaze)
+
+
 
       
