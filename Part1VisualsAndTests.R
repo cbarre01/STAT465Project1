@@ -1,4 +1,13 @@
 # Packages Required
+install.packages("readxl")
+install.packages("ggplot2")
+install.packages("tidyr")
+install.packages("dplyr")
+install.packages("aod") # Logistic Regression
+install.packages("car") # VIF
+install.packages("InformationValue") # Concordance Rates and ROC
+install.packages("lme4")
+
 library(readxl)
 library(ggplot2)
 library(tidyr)
@@ -7,10 +16,14 @@ library(aod) # Logistic Regression
 library(car) # VIF
 library(InformationValue) # Concordance Rates and ROC
 library(lme4) # Random Slopes
+library(RColorBrewer)
 
 ### Dataset Manipulation
 # Import Dataset
-data <- read_excel("C:/Users/Colin.000/Desktop/STAT465/Project1/STAT 465 Fall 2019 P1 Benchmark Aggregate File PROPRIETARY AND CONFIDENTIAL.xlsx")
+
+
+data <- read_excel("C:\Users\cbarre01\Downloads\STAT 465 Fall 2019 P1 Benchmark Aggregate File PROPRIETARY AND CONFIDENTIAL")
+data = STAT_465_Fall_2019_P1_Benchmark_Aggregate_File_PROPRIETARY_AND_CONFIDENTIAL
 
 # Rename/Drop Columns For Convience
 names(data) <- c("id", "school", "gender_identity", "sexual_orientation", "sexual_orientation_other", "race_ethnicity", 
@@ -89,23 +102,26 @@ sj_data = my_data[which(my_data$school ==schools[8]),]
 #create empty plots for each response
 g_hate = ggplot(intervention_means, aes(x = school, y = hate_prop, fill = school))
 g_haze = ggplot(intervention_means, aes(x = school, y = hazing_prop, fill = school))
-       
+
+#Color for plot, can be changed just needs pallette with 8 colors
+myColors = brewer.pal(8,"Blues")       
+
 
 #creating labeled bar chart plots for each response
 g_hate + geom_bar(stat = "identity") + labs(title = "Bar Chart",
                                             subtitle = "Proportion of Students who Intervened in Hateful Speech/Racism Incidents, Grouped by University",
                                             caption = "Source: 2019 National College Student Bystander Benchmark Survey",
                                             x = "University",
-                                            y = "Intervention Rate") + scale_colour_brewer() + ylim(0,1) +
-                                            geom_text(aes(label=round(hate_prop, digits = 2)), vjust=-0.3, size=3.5) + guides(fill=guide_legend(title="University"))
+                                            y = "Intervention Rate") + scale_colour_brewer() +
+                                            geom_text(aes(label=round(hate_prop, digits = 3)), vjust=-0.3, size=3.5) + guides(fill=guide_legend(title="University")) + scale_fill_manual(values=myColors)
 
 
 g_haze + geom_bar(stat = "identity") + labs(title = "Bar Chart",
                                             subtitle = "Proportion of Students who Intervened in Hazing Incidents, Grouped by University",
                                             caption = "Source: 2019 National College Student Bystander Benchmark Survey",
                                             x = "University",
-                                            y = "Intervention Rate")+ ylim(0,1) +
-  geom_text(aes(label=round(hazing_prop, digits = 2)), vjust=-0.3, size=3.5) + guides(fill=guide_legend(title="University"))
+                                            y = "Intervention Rate")+ ylim(0,1) + scale_colour_brewer() +
+  geom_text(aes(label=round(hazing_prop, digits = 2)), vjust=-0.3, size=3.5) + guides(fill=guide_legend(title="University")) + scale_fill_manual(values=myColors)
 
        
 
