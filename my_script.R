@@ -191,13 +191,13 @@ summary(model9)
 
 ####### FINAL MODEL #1R #######
 ## Model 10 - Remove Sexual Orientation 
-model9 <- glmer(hate_speech_ind ~ gender_identity + first_yr_ind
+model10 <- glmer(hate_speech_ind ~ gender_identity + first_yr_ind
                 + greek_life_ind + (1 | school), data = my_data, family = "binomial")
 # VIF check
-vif(model9)
+vif(model10)
 # Wald Tests For Fixed Effects
-wald.test(b = fixef(model9), Sigma = vcov(model9), Terms = 2:5) # Gender Identity p-value
-summary(model9)
+wald.test(b = fixef(model10), Sigma = vcov(model10), Terms = 2:5) # Gender Identity p-value
+summary(model10)
 # Concordance
 pred10 <- plogis(predict(model10, my_data))  # Predicted Scores
 cord10 <- Concordance(my_data$hate_speech_ind, pred10)
@@ -327,9 +327,9 @@ wald.test(b = fixef(model10b), Sigma = vcov(model10b), Terms = 2:6) # Year p-val
 summary(model10b)
 
 
-####### FINAL MODEL #2B #######
-## Model11b - Back To First Year Indicator, Add Sexual Orientation
-model11b <- glmer(hazing_ind ~ first_yr_ind + sexual_orientation + first_generation_college_student_ind
+####### FINAL MODEL #2R #######
+## Model11b - Back To First Year Indicator
+model11b <- glmer(hazing_ind ~ first_yr_ind + first_generation_college_student_ind
                  + greek_life_ind + athlete_ind + (1 | school), data = my_data, family = binomial(link = "logit"))
 # VIF check
 vif(model11b)
